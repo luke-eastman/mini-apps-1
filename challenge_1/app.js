@@ -65,7 +65,7 @@ for (var i = 0; i < squares.length; i++) {
   squares[i].backgroundColor = 'black';
   squares[i].addEventListener('click', (event) => handleClick(event));
 }
-
+//--------------------controller----------------------------------------
 var handleClick = (event) => {
   if (over) {
     alert('reset game to play again');
@@ -82,8 +82,23 @@ var handleClick = (event) => {
   }
 }
 var updateWins = () => {
-  XWins.innerHTML = `"X" Wins :${xWins}`;
-  OWins.innerHTML = `"O" Wins :${oWins}`;
+  XWins.innerHTML = `"X" Wins :${getWins('x')}`;
+  OWins.innerHTML = `"O" Wins :${getWins('o')}`;
+}
+
+var incrementWins = (player) => {
+  if (player === 'x') {
+    state.xWins++
+  } else {
+    state.oWins++
+  }
+}
+var getWins = (player) => {
+  if (player === 'x') {
+    return state.xWins;
+  } else {
+    return state.oWins;
+  }
 }
 var getIndex = (square) => {
   if (square.parentElement.classList.contains('row-one')) {
@@ -162,11 +177,11 @@ var gameOver = () => {
 var checkColumns = () => {
   for (var i = 0; i < 3; i++) {
     if (isColOf('x', i)) {
-      xWins++;
+      incrementWins('x');
       return '"X" wins';
     }
     if (isColOf('o', i)) {
-      oWins++;
+      incrementWins('o');
       return '"O" wins';
     }
   }
@@ -175,11 +190,11 @@ var checkColumns = () => {
 var checkRows = () => {
   for (var i = 0; i < 3; i++) {
     if (isRowOf('x', i)) {
-      xWins++;
+      incrementWins('x');
       return '"X" wins';
     }
     if (isRowOf('o', i)) {
-      oWins++;
+      incrementWins('o');
       return '"O" wins';
     }
   }
@@ -187,11 +202,11 @@ var checkRows = () => {
 
 var checkDiagonals = () => {
   if (diagonalsOf('x')) {
-    xWins++;
+    incrementWins('x');
     return '"X" wins';
   }
   if (diagonalsOf('o')) {
-    oWins++;
+    incrementWins('o');
     return '"O" wins';
   }
 }
@@ -247,5 +262,8 @@ var turn = true;
 var over = false;
 var boardArray = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
 var turnCount = 0;
-var xWins = 0;
-var oWins = 0;
+
+var state = {
+  xWins: 0,
+  oWins: 0
+}
