@@ -81,6 +81,7 @@ var handleClick = (event) => {
     alert(gameIsOver);
   }
 }
+
 var updateWins = () => {
   XWins.innerHTML = `"X" Wins :${getWins('x')}`;
   OWins.innerHTML = `"O" Wins :${getWins('o')}`;
@@ -134,7 +135,7 @@ var markSquare = (square) => {
 
 var switchTurns = () => {
   turn = !turn;
-  turnCount++;
+  incrementTurnCount();
 }
 
 var resetGame = () => {
@@ -144,7 +145,7 @@ var resetGame = () => {
   }
   boardArray = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
   turn = true;
-  turnCount = 0;
+  resetTurnCount();
   over = false;
 
 
@@ -167,7 +168,7 @@ var gameOver = () => {
     over = true;
     return verticals;
   }
-  if (turnCount === 9) {
+  if(getTurnCount() === 9) {
     return 'a draw!';
   }
   return false;
@@ -261,9 +262,35 @@ var minorDiagonalOf = (player) => {
 var turn = true;
 var over = false;
 var boardArray = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
-var turnCount = 0;
 
 var state = {
+  turnCount: 0,
   xWins: 0,
   oWins: 0
+}
+
+var resetTurnCount = () => {
+  state.turnCount = 0;
+}
+
+var getTurnCount = () => {
+  return state.turnCount;
+}
+
+var incrementTurnCount = () => {
+  state.turnCount++;
+}
+var incrementWins = (player) => {
+  if (player === 'x') {
+    state.xWins++
+  } else {
+    state.oWins++
+  }
+}
+var getWins = (player) => {
+  if (player === 'x') {
+    return state.xWins;
+  } else {
+    return state.oWins;
+  }
 }
