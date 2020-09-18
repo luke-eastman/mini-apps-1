@@ -42,4 +42,19 @@ for (var i = 0; i < squares.length; i++) {
   squares[i].style.height = '50px'
   squares[i].style.width = '50px'
   squares[i].backgroundColor = 'black';
+  squares[i].addEventListener('click', (event) => handleClick(event));
 }
+
+var handleClick = (event) => {
+  var square = event.target
+  if (turn === 'x') {
+    square.innerHTML = 'X';
+    turn = 'o';
+  } else if (turn === 'o') {
+    square.innerHTML = 'O';
+    turn = 'x';
+  }
+  console.log(square)
+}
+
+var turn = 'x';
