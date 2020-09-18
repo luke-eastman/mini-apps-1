@@ -54,6 +54,10 @@ for (var i = 0; i < squares.length; i++) {
 }
 
 var handleClick = (event) => {
+  if (over) {
+    alert('reset game to play again');
+    return;
+  }
   var square = event.target
 
   markSquare(square);
@@ -109,6 +113,7 @@ var resetGame = () => {
   boardArray = [['-','-', '-'],['-','-', '-'],['-','-', '-']];
   turn = true;
   turnCount = 0;
+  over = false;
 }
 
 var gameOver = () => {
@@ -117,12 +122,15 @@ var gameOver = () => {
   var verticals = checkVerticals();
 
   if (diagonals) {
+    over = true;
     return diagonals;
   }
   if (horizontals) {
+    over = true;
     return horizontals;
   }
   if (verticals) {
+    over = true;
     return verticals;
   }
   if (turnCount === 9) {
@@ -157,6 +165,6 @@ var checkDiagonals =() => {
 }
 
 var turn = true;
-
+var over = false;
 var boardArray = [['-','-', '-'],['-','-', '-'],['-','-', '-']];
 var turnCount = 0;
