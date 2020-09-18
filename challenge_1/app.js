@@ -5,10 +5,14 @@ var board = document.createElement('table');
 body.prepend(board);
 board.style.emptyCells =  'show';
 
-boardBody = document.createElement('tbody')
-var rowOne = document.createElement('tr')
-var rowTwo = document.createElement('tr')
-var rowThree = document.createElement('tr')
+boardBody = document.createElement('tbody');
+var rowOne = document.createElement('tr');
+var rowTwo = document.createElement('tr');
+var rowThree = document.createElement('tr');
+rowOne.classList.add('row-one');
+rowTwo.classList.add('row-two');
+rowThree.classList.add('row-three');
+
 boardBody.append(rowOne);
 boardBody.append(rowTwo);
 boardBody.append(rowThree);
@@ -47,14 +51,39 @@ for (var i = 0; i < squares.length; i++) {
 
 var handleClick = (event) => {
   var square = event.target
-  if (turn === 'x') {
-    square.innerHTML = 'X';
-    turn = 'o';
-  } else if (turn === 'o') {
-    square.innerHTML = 'O';
-    turn = 'x';
-  }
-  console.log(square)
+
+  markSquare(square);
 }
 
 var turn = 'x';
+
+var boardArray = [['-','-', '-'],['-','-', '-'],['-','-', '-']];
+
+var getIndex = (square) => {
+  if (square.parentElement.classList.contains('row-one')) {
+    return 0;
+  } else if (square.parentElement.classList.contains('row-two')) {
+    return 1;
+  } else if (square.parentElement.classList.contains('row-three')) {
+    return 2;
+  }
+}
+
+var markSquare = (square) => {
+  var x = square.cellIndex;
+  var y = getIndex(square);
+  if (turn === 'x') {
+    boardArray[y][x] = 'x'
+    square.innerHTML = 'X';
+    turn = 'o';
+  } else if (turn === 'o') {
+    boardArray[y][x] = 'o'
+    square.innerHTML = 'O';
+    turn = 'x';
+  }
+  console.log(boardArray[0]);
+  console.log(boardArray[1]);
+  console.log(boardArray[2]);
+  console.log('----------')
+
+}
