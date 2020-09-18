@@ -44,6 +44,19 @@ resetGameButton.innerHTML = 'Reset Game';
 board.append(resetGameButton);
 resetGameButton.addEventListener('click', (event) => resetGame());
 
+
+var wins = document.createElement('div');
+wins.classList.add('wins');
+var XWins = document.createElement('div');
+XWins.classList.add('x-wins');
+XWins.innerHTML = '"X" Wins: 0';
+wins.append(XWins);
+var OWins = document.createElement('div');
+OWins.classList.add('o-wins');
+OWins.innerHTML = '"O" Wins: 0';
+wins.append(XWins);
+wins.append(OWins);
+body.append(wins);
 var squares = board.querySelectorAll('td')
 for (var i = 0; i < squares.length; i++) {
   squares[i].style.border = '5px solid black';
@@ -62,12 +75,16 @@ var handleClick = (event) => {
 
   markSquare(square);
 
-  var isGameOver = gameOver();
-  if (isGameOver) {
-    alert(isGameOver);
+  var gameIsOver = gameOver();
+  if (gameIsOver) {
+    updateWins();
+    alert(gameIsOver);
   }
 }
-
+var updateWins = () => {
+  XWins.innerHTML = `"X" Wins :${xWins}`;
+  OWins.innerHTML = `"O" Wins :${oWins}`;
+}
 var getIndex = (square) => {
   if (square.parentElement.classList.contains('row-one')) {
     return 0;
@@ -106,6 +123,7 @@ var switchTurns = () => {
 }
 
 var resetGame = () => {
+  console.log(xWins, oWins)
   var squares = board.querySelectorAll('td')
   for (var i = 0; i < squares.length; i++) {
     squares[i].innerHTML = '';
@@ -114,12 +132,14 @@ var resetGame = () => {
   turn = true;
   turnCount = 0;
   over = false;
+
+
 }
 
 var gameOver = () => {
   var diagonals = checkDiagonals();
-  var horizontals = checkHorizontals();
-  var verticals = checkVerticals();
+  var horizontals = checkRows();
+  var verticals = checkColumns();
 
   if (diagonals) {
     over = true;
@@ -139,32 +159,96 @@ var gameOver = () => {
   return false;
 }
 
-var checkVerticals = () => {
-  if (boardArray[0][0] === 'x' && boardArray[0][1] === 'x' && boardArray[0][2] === 'x' || boardArray[1][0] === 'x' && boardArray[1][1] === 'x' && boardArray[1][2] ==='x' || boardArray[2][0] === 'x' && boardArray[2][1] === 'x' && boardArray[2][2] === 'x') {
-    return 'x wins';
-  } else if (boardArray[0][0] === 'o' && boardArray[0][1] === 'o' && boardArray[0][2] === 'o' || boardArray[1][0] === 'o' && boardArray[1][1] === 'o' && boardArray[1][2] === 'o' || boardArray[2][0] === 'o' && boardArray[2][1] === 'o' && boardArray[2][2] === 'o') {
-    return 'o wins';
-  }
-  return false;
-}
-var checkHorizontals = () => {
-  if (boardArray[0][0] === 'x' && boardArray[1][0] === 'x' && boardArray[2][0] === 'x' || boardArray[0][1] === 'x' && boardArray[1][1] === 'x' && boardArray[2][1] === 'x' || boardArray[0][2] === 'x' && boardArray[1][2] === 'x' && boardArray[2][2] === 'x') {
-    return 'x wins';
-  } else if (boardArray[0][0] === 'o' && boardArray[0][1] === 'o' && boardArray[0][2] === 'o' || boardArray[1][0] === 'o' && boardArray[1][1] === 'o' && boardArray[1][2] === 'o' || boardArray[2][0] === 'o' && boardArray[2][1] === 'o' && boardArray[2][2] === 'o') {
-    return 'o wins';
-  }
-  return false;
-}
-var checkDiagonals =() => {
-  if (boardArray[2][0] === 'x' && boardArray[1][1] === 'x' && boardArray[0][2] === 'x' || boardArray[0][0] === 'x' && boardArray[1][1] === 'x' && boardArray[2][2] === 'x') {
-    return 'x wins';
-  } else if (boardArray[2][0] === 'o' && boardArray[1][1] === 'o' && boardArray[0][2] === 'o' || boardArray[0][0] === 'o' && boardArray[1][1] === 'o' && boardArray[2][2] === 'o') {
-    return 'o wins';
-  }
-  return false;
-}
+
 
 var turn = true;
 var over = false;
 var boardArray = [['-','-', '-'],['-','-', '-'],['-','-', '-']];
 var turnCount = 0;
+var xWins = 0;
+var oWins = 0;
+
+var checkColumns = () => {
+  for (var i = 0; i < 3; i++) {
+    if (colOfX(i)) {
+      xWins++;
+      return '"X" wins';
+    }
+    if (colOfO(i)) {
+      oWins++;
+      return '"O" wins';
+    }
+  }
+}
+
+var checkRows = () => {
+  for (var i = 0; i < 3; i++) {
+    if (rowOfX(i)) {
+      xWins++;
+      return '"X" wins';
+    }
+    if (rowOfO(i)) {
+      oWins++;
+      return '"O" wins';
+    }
+  }
+}
+
+var checkDiagonals = () => {
+  if (diagonalsOfX()) {
+    xWins++;
+    return '"X" wins';
+  }
+  if (diagonalsOfO()) {
+    oWins++;
+    return '"O" wins';
+  }
+}
+
+var isO = (x,y) => {
+  return boardArray[x][y] === 'o';
+}
+
+var isX = (x,y) => {
+  return boardArray[x][y] === 'x';
+}
+
+var colOfX = (col) => {
+  return isX(0, col) && isX(1, col) && isX(2, col);
+}
+
+var colOfO = (col) => {
+  return isO(0, col) && isO(1, col) && isO(2, col);
+}
+
+var rowOfX = (row) => {
+  return isX(row, 0) && isX(row, 1) && isX (row, 2);
+}
+
+var rowOfO = (row) => {
+  return isO(row, 0) && isO(row, 1) && isO (row, 2);
+}
+
+var diagonalsOfX = () => {
+  return majorDiagonalOfX() || minorDiagonalOfX();
+}
+
+var diagonalsOfO = () => {
+  return majorDiagonalOfO() || minorDiagonalOfO();
+}
+
+var majorDiagonalOfX = () => {
+  return isX(0, 0) && isX(1, 1) && isX(2, 2);
+}
+
+var majorDiagonalOfO = () => {
+  return isO(0, 0) && isO(1, 1) && isO(2, 2);
+}
+
+var minorDiagonalOfX = () => {
+  return isX(0, 2) && isX(1, 1) && isX(2, 0);
+}
+
+var minorDiagonalOfO = () => {
+  return isO(0, 2) && isO(1, 1) && isO(2, 0);
+}
