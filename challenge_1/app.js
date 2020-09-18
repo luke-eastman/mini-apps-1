@@ -39,6 +39,10 @@ rowThree.append(rowThreeColumnOne);
 rowThree.append(rowThreeColumnTwo);
 rowThree.append(rowThreeColumnThree);
 
+var resetGameButton = document.createElement('button');
+resetGameButton.innerHTML = 'Reset Game';
+board.append(resetGameButton);
+resetGameButton.addEventListener('click', (event) => resetGame());
 
 var squares = board.querySelectorAll('td')
 for (var i = 0; i < squares.length; i++) {
@@ -53,11 +57,12 @@ var handleClick = (event) => {
   var square = event.target
 
   markSquare(square);
+
+  var isGameOver = gameOver();
+  if (isGameOver) {
+    alert(isGameOver);
+  }
 }
-
-var turn = 'x';
-
-var boardArray = [['-','-', '-'],['-','-', '-'],['-','-', '-']];
 
 var getIndex = (square) => {
   if (square.parentElement.classList.contains('row-one')) {
@@ -72,18 +77,86 @@ var getIndex = (square) => {
 var markSquare = (square) => {
   var x = square.cellIndex;
   var y = getIndex(square);
-  if (turn === 'x') {
-    boardArray[y][x] = 'x'
-    square.innerHTML = 'X';
-    turn = 'o';
-  } else if (turn === 'o') {
-    boardArray[y][x] = 'o'
-    square.innerHTML = 'O';
-    turn = 'x';
+  if (turn === true) {
+    if (boardArray[y][x] === '-') {
+      boardArray[y][x] = 'x'
+      square.innerHTML = 'X';
+      switchTurns();
+    } else {
+      alert('seats taken')
+    }
+  } else if (turn === false) {
+    if (boardArray[y][x] === '-') {
+      boardArray[y][x] = 'o'
+      square.innerHTML = 'O';
+      switchTurns();
+    } else {
+      alert('seats taken')
+    }
   }
-  console.log(boardArray[0]);
-  console.log(boardArray[1]);
-  console.log(boardArray[2]);
-  console.log('----------')
-
 }
+
+var switchTurns = () => {
+  turn = !turn;
+  turnCount++;
+}
+
+var resetGame = () => {
+  var squares = board.querySelectorAll('td')
+  for (var i = 0; i < squares.length; i++) {
+    squares[i].innerHTML = '';
+  }
+  boardArray = [['-','-', '-'],['-','-', '-'],['-','-', '-']];
+  turn = true;
+  turnCount = 0;
+}
+
+var gameOver = () => {
+  var diagonals = checkDiagonals();
+  var horizontals = checkHorizontals();
+  var verticals = checkVerticals();
+
+  if (diagonals) {
+    return diagonals;
+  }
+  if (horizontals) {
+    return horizontals;
+  }
+  if (verticals) {
+    return verticals;
+  }
+  if (turnCount === 9) {
+    return 'a draw!';
+  }
+  return false;
+}
+
+var checkVerticals = () => {
+  if (boardArray[0][0] === 'x' && boardArray[0][1] === 'x' && boardArray[0][2] === 'x' || boardArray[1][0] === 'x' && boardArray[1][1] === 'x' && boardArray[1][2] ==='x' || boardArray[2][0] === 'x' && boardArray[2][1] === 'x' && boardArray[2][2] === 'x') {
+    return 'x wins';
+  } else if (boardArray[0][0] === 'o' && boardArray[0][1] === 'o' && boardArray[0][2] === 'o' || boardArray[1][0] === 'o' && boardArray[1][1] === 'o' && boardArray[1][2] === 'o' || boardArray[2][0] === 'o' && boardArray[2][1] === 'o' && boardArray[2][2] === 'o') {
+    return 'o wins';
+  }
+  return false;
+}
+var checkHorizontals = () => {
+  if (boardArray[0][0] === 'x' && boardArray[1][0] === 'x' && boardArray[2][0] === 'x' || boardArray[0][1] === 'x' && boardArray[1][1] === 'x' && boardArray[2][1] === 'x' || boardArray[0][2] === 'x' && boardArray[1][2] === 'x' && boardArray[2][2] === 'x') {
+    return 'x wins';
+  } else if (boardArray[0][0] === 'o' && boardArray[0][1] === 'o' && boardArray[0][2] === 'o' || boardArray[1][0] === 'o' && boardArray[1][1] === 'o' && boardArray[1][2] === 'o' || boardArray[2][0] === 'o' && boardArray[2][1] === 'o' && boardArray[2][2] === 'o') {
+    return 'o wins';
+  }
+  return false;
+}
+var checkDiagonals =() => {
+  if (boardArray[2][0] === 'x' && boardArray[1][1] === 'x' && boardArray[0][2] === 'x' || boardArray[0][0] === 'x' && boardArray[1][1] === 'x' && boardArray[2][2] === 'x') {
+    return 'x wins';
+  } else if (boardArray[2][0] === 'o' && boardArray[1][1] === 'o' && boardArray[0][2] === 'o' || boardArray[0][0] === 'o' && boardArray[1][1] === 'o' && boardArray[2][2] === 'o') {
+    return 'o wins';
+  }
+  return false;
+}
+
+var turn = true;
+
+var boardArray = [['-','-', '-'],['-','-', '-'],['-','-', '-']];
+var turnCount = 0;
