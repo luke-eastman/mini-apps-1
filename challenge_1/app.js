@@ -123,7 +123,6 @@ var switchTurns = () => {
 }
 
 var resetGame = () => {
-  console.log(xWins, oWins)
   var squares = board.querySelectorAll('td')
   for (var i = 0; i < squares.length; i++) {
     squares[i].innerHTML = '';
