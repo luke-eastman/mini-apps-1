@@ -1,4 +1,4 @@
-
+//--------------------view------------------------------------------
 var body = document.body;
 
 var board = document.createElement('table');
@@ -72,9 +72,7 @@ var handleClick = (event) => {
     return;
   }
   var square = event.target
-
   markSquare(square);
-
   var gameIsOver = gameOver();
   if (gameIsOver) {
     updateWins();
@@ -87,20 +85,7 @@ var updateWins = () => {
   OWins.innerHTML = `"O" Wins :${getWins('o')}`;
 }
 
-var incrementWins = (player) => {
-  if (player === 'x') {
-    state.xWins++
-  } else {
-    state.oWins++
-  }
-}
-var getWins = (player) => {
-  if (player === 'x') {
-    return state.xWins;
-  } else {
-    return state.oWins;
-  }
-}
+
 var getIndex = (square) => {
   if (square.parentElement.classList.contains('row-one')) {
     return 0;
@@ -133,11 +118,6 @@ var markSquare = (square) => {
   }
 }
 
-var switchTurns = () => {
-  state.player = !state.player;
-  incrementTurnCount();
-}
-
 var resetGame = () => {
   var squares = board.querySelectorAll('td')
   for (var i = 0; i < squares.length; i++) {
@@ -147,7 +127,11 @@ var resetGame = () => {
   resetTurnCount();
   resetOver();
   resetPlayer();
+}
 
+var switchTurns = () => {
+  state.player = !state.player;
+  incrementTurnCount();
 }
 
 var gameOver = () => {
@@ -174,6 +158,90 @@ var gameOver = () => {
   return false;
 }
 
+
+//--------------------model-----------------------------
+
+
+var state = {
+  board: [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']],
+  turnCount: 0,
+  xWins: 0,
+  oWins: 0,
+  player: true,
+  over: false
+}
+
+var resetOver = () => {
+  state.over = false;
+}
+var setOver = () => {
+  state.over = true;
+}
+var isOver = () => {
+  return state.over
+}
+var resetBoard = () => {
+  state.board = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
+}
+var resetPlayer = () => {
+  state.player = true;
+}
+var isPlayerX = () => {
+  return state.player === true;
+}
+
+var getPiece = (x, y) => {
+  return state.board[x][y];
+}
+
+var setPiece = (x, y) => {
+  if (isPlayerX()) {
+    state.board[x][y] = 'x';
+  } else {
+    state.board[x][y] = 'o';
+  }
+}
+
+var resetTurnCount = () => {
+  state.turnCount = 0;
+}
+
+var getTurnCount = () => {
+  return state.turnCount;
+}
+
+var incrementTurnCount = () => {
+  state.turnCount++;
+}
+var incrementWins = (player) => {
+  if (player === 'x') {
+    state.xWins++
+  } else {
+    state.oWins++
+  }
+}
+var getWins = (player) => {
+  if (player === 'x') {
+    return state.xWins;
+  } else {
+    return state.oWins;
+  }
+}
+
+var incrementWins = (player) => {
+  if (player === 'x') {
+    state.xWins++
+  } else {
+    state.oWins++
+  }
+}
+var getWins = (player) => {
+  if (player === 'x') {
+    return state.xWins;
+  } else {
+    return state.oWins;
+  }
+}
 
 var checkColumns = () => {
   for (var i = 0; i < 3; i++) {
@@ -254,74 +322,5 @@ var minorDiagonalOf = (player) => {
     return isX(0, 2) && isX(1, 1) && isX(2, 0);
   } else {
     return isO(0, 2) && isO(1, 1) && isO(2, 0);
-  }
-}
-
-//--------------------model-----------------------------
-
-
-var state = {
-  board: [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']],
-  turnCount: 0,
-  xWins: 0,
-  oWins: 0,
-  player: true,
-  over: false
-}
-
-var resetOver = () => {
-  state.over = false;
-}
-var setOver = () => {
-  state.over = true;
-}
-var isOver = () => {
-  return state.over
-}
-var resetBoard = () => {
-  state.board = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
-}
-var resetPlayer = () => {
-  state.player = true;
-}
-var isPlayerX = () => {
-  return state.player === true;
-}
-
-var getPiece = (x, y) => {
-  return state.board[x][y];
-}
-
-var setPiece = (x, y) => {
-  if (isPlayerX()) {
-    state.board[x][y] = 'x';
-  } else {
-    state.board[x][y] = 'o';
-  }
-}
-
-var resetTurnCount = () => {
-  state.turnCount = 0;
-}
-
-var getTurnCount = () => {
-  return state.turnCount;
-}
-
-var incrementTurnCount = () => {
-  state.turnCount++;
-}
-var incrementWins = (player) => {
-  if (player === 'x') {
-    state.xWins++
-  } else {
-    state.oWins++
-  }
-}
-var getWins = (player) => {
-  if (player === 'x') {
-    return state.xWins;
-  } else {
-    return state.oWins;
   }
 }
