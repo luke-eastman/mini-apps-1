@@ -115,16 +115,16 @@ var markSquare = (square) => {
   var x = square.cellIndex;
   var y = getIndex(square);
   if (turn === true) {
-    if (boardArray[y][x] === '-') {
-      boardArray[y][x] = 'x'
+    if (getPiece(y, x) === '-') {
+      setPiece(y, x);
       square.innerHTML = 'X';
       switchTurns();
     } else {
       alert('seats taken')
     }
   } else if (turn === false) {
-    if (boardArray[y][x] === '-') {
-      boardArray[y][x] = 'o'
+    if (getPiece(y, x) === '-') {
+      setPiece(y, x);
       square.innerHTML = 'O';
       switchTurns();
     } else {
@@ -143,8 +143,8 @@ var resetGame = () => {
   for (var i = 0; i < squares.length; i++) {
     squares[i].innerHTML = '';
   }
-  boardArray = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
   turn = true;
+  resetBoard();
   resetTurnCount();
   over = false;
 
@@ -213,11 +213,11 @@ var checkDiagonals = () => {
 }
 
 var isO = (x,y) => {
-  return boardArray[x][y] === 'o';
+  return getPiece(x, y) === 'o';
 }
 
 var isX = (x,y) => {
-  return boardArray[x][y] === 'x';
+  return getPiece(x, y) === 'x';
 }
 
 var isColOf = (player, col) => {
@@ -261,12 +261,29 @@ var minorDiagonalOf = (player) => {
 
 var turn = true;
 var over = false;
-var boardArray = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
 
 var state = {
+  board: [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']],
   turnCount: 0,
   xWins: 0,
-  oWins: 0
+  oWins: 0,
+  player: false
+}
+
+var resetBoard = () => {
+  state.board = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
+}
+
+var getPiece = (x, y) => {
+  return state.board[x][y];
+}
+
+var setPiece = (x, y) => {
+  if (turn === true) {
+    state.board[x][y] = 'x';
+  } else {
+    state.board[x][y] = 'o';
+  }
 }
 
 var resetTurnCount = () => {
