@@ -56,6 +56,7 @@ var getTurnCount = () => {
 
 var switchTurns = () => {
   state.player = !state.player;
+  setNextPlayer(state.player);
   incrementTurnCount();
 }
 
@@ -170,10 +171,29 @@ var minorDiagonalOf = (player) => {
 
 //--------------------view------------------------------------------
 var body = document.body;
+var title = document.createElement('h1');
+title.innerHTML = 'Tic Tac Toe';
+body.prepend(title);
+
+var whichPlayer = document.createElement('h4');
+whichPlayer.classList.add('which-turn');
+whichPlayer.innerHTML = '"X" is up!';
+body.append(whichPlayer);
+
+var setNextPlayer = (player) => {
+  if (player === true) {
+    whichPlayer.innerHTML = '"X" is up!';
+  } else {
+    whichPlayer.innerHTML = '"O" is up!';
+  }
+}
+
 
 var board = document.createElement('table');
-body.prepend(board);
+body.append(board);
 board.style.emptyCells =  'show';
+
+
 
 boardBody = document.createElement('tbody');
 var rowOne = document.createElement('tr');
@@ -214,7 +234,6 @@ resetGameButton.innerHTML = 'Reset Game';
 board.append(resetGameButton);
 resetGameButton.addEventListener('click', (event) => resetGame());
 
-
 var wins = document.createElement('div');
 wins.classList.add('wins');
 var XWins = document.createElement('div');
@@ -227,6 +246,7 @@ OWins.innerHTML = '"O" Wins: 0';
 wins.append(XWins);
 wins.append(OWins);
 body.append(wins);
+
 var squares = board.querySelectorAll('td')
 for (var i = 0; i < squares.length; i++) {
   squares[i].style.border = '5px solid black';
