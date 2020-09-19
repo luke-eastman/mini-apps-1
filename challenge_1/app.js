@@ -177,14 +177,14 @@ body.prepend(title);
 
 var whichPlayer = document.createElement('h4');
 whichPlayer.classList.add('which-turn');
-whichPlayer.innerHTML = '"X" is up!';
+whichPlayer.innerHTML = '"X" is up next!';
 body.append(whichPlayer);
 
 var setNextPlayer = (player) => {
   if (player === true) {
-    whichPlayer.innerHTML = '"X" is up!';
+    whichPlayer.innerHTML = '"X" is up next!';
   } else {
-    whichPlayer.innerHTML = '"O" is up!';
+    whichPlayer.innerHTML = '"O" is up next!';
   }
 }
 
@@ -192,8 +192,6 @@ var setNextPlayer = (player) => {
 var board = document.createElement('table');
 body.append(board);
 board.style.emptyCells =  'show';
-
-
 
 boardBody = document.createElement('tbody');
 var rowOne = document.createElement('tr');
@@ -260,7 +258,10 @@ for (var i = 0; i < squares.length; i++) {
     OWins.innerHTML = `"O" Wins :${getWins('o')}`;
   }
 }
+
+
 //--------------------controller----------------------------------------
+
 var handleClick = (event) => {
   if (isOver()) {
     alert('reset game to play again');
@@ -340,5 +341,3 @@ var gameOver = () => {
   }
   return false;
 }
-
-
