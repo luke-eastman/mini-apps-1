@@ -114,7 +114,7 @@ var getIndex = (square) => {
 var markSquare = (square) => {
   var x = square.cellIndex;
   var y = getIndex(square);
-  if (turn === true) {
+  if (isPlayerX()) {
     if (getPiece(y, x) === '-') {
       setPiece(y, x);
       square.innerHTML = 'X';
@@ -122,7 +122,7 @@ var markSquare = (square) => {
     } else {
       alert('seats taken')
     }
-  } else if (turn === false) {
+  } else if (!isPlayerX()) {
     if (getPiece(y, x) === '-') {
       setPiece(y, x);
       square.innerHTML = 'O';
@@ -134,7 +134,7 @@ var markSquare = (square) => {
 }
 
 var switchTurns = () => {
-  turn = !turn;
+  state.player = !state.player;
   incrementTurnCount();
 }
 
@@ -259,7 +259,6 @@ var minorDiagonalOf = (player) => {
 
 //--------------------model-----------------------------
 
-var turn = true;
 var over = false;
 
 var state = {
@@ -267,11 +266,16 @@ var state = {
   turnCount: 0,
   xWins: 0,
   oWins: 0,
-  player: false
+  player: true
 }
+
 
 var resetBoard = () => {
   state.board = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
+}
+
+var isPlayerX = () => {
+  return state.player === true;
 }
 
 var getPiece = (x, y) => {
@@ -279,7 +283,7 @@ var getPiece = (x, y) => {
 }
 
 var setPiece = (x, y) => {
-  if (turn === true) {
+  if (isPlayerX()) {
     state.board[x][y] = 'x';
   } else {
     state.board[x][y] = 'o';
