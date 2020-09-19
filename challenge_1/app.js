@@ -67,7 +67,7 @@ for (var i = 0; i < squares.length; i++) {
 }
 //--------------------controller----------------------------------------
 var handleClick = (event) => {
-  if (over) {
+  if (isOver()) {
     alert('reset game to play again');
     return;
   }
@@ -143,11 +143,10 @@ var resetGame = () => {
   for (var i = 0; i < squares.length; i++) {
     squares[i].innerHTML = '';
   }
-  turn = true;
   resetBoard();
   resetTurnCount();
-  over = false;
-
+  resetOver();
+  resetPlayer();
 
 }
 
@@ -157,18 +156,19 @@ var gameOver = () => {
   var verticals = checkColumns();
 
   if (diagonals) {
-    over = true;
+    setOver();
     return diagonals;
   }
   if (horizontals) {
-    over = true;
+    setOver();
     return horizontals;
   }
   if (verticals) {
-    over = true;
+    setOver();
     return verticals;
   }
   if(getTurnCount() === 9) {
+    setOver();
     return 'a draw!';
   }
   return false;
@@ -259,21 +259,31 @@ var minorDiagonalOf = (player) => {
 
 //--------------------model-----------------------------
 
-var over = false;
 
 var state = {
   board: [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']],
   turnCount: 0,
   xWins: 0,
   oWins: 0,
-  player: true
+  player: true,
+  over: false
 }
 
-
+var resetOver = () => {
+  state.over = false;
+}
+var setOver = () => {
+  state.over = true;
+}
+var isOver = () => {
+  return state.over
+}
 var resetBoard = () => {
   state.board = [['-', '-', '-'],['-', '-', '-'],['-', '-', '-']];
 }
-
+var resetPlayer = () => {
+  state.player = true;
+}
 var isPlayerX = () => {
   return state.player === true;
 }
